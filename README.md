@@ -1,24 +1,24 @@
-# Détection prédictive des fraudes hydriques et énergétiques
+# DÃ©tection prÃ©dictive des fraudes hydriques et Ã©nergÃ©tiques
 
-**Stage d’initiation — Amendis (Veolia Maroc) · ENSA Tétouan · 2024–2025**
+**Stage dâ€™initiation â€” Amendis (Veolia Maroc) Â· ENSA TÃ©touan Â· 2024â€“2025**
 
-Système hybride de détection de fraudes sur les historiques de consommation, combinant **machine learning** (PU Learning, stacking) et **règles métier** calibrées avec les équipes terrain.
+SystÃ¨me hybride de dÃ©tection de fraudes sur les historiques de consommation, combinant **machine learning** (PU Learning, stacking) et **rÃ¨gles mÃ©tier** calibrÃ©es avec les Ã©quipes terrain.
 
 ---
 
 ## Sommaire
 
 - [Contexte](#contexte)
-- [Problématique](#problématique)
+- [ProblÃ©matique](#problÃ©matique)
 - [Objectifs](#objectifs)
 - [Approche](#approche)
-- [Architecture du système](#architecture-du-système)
-- [Données et feature engineering](#données-et-feature-engineering)
-- [Modélisation](#modélisation)
-- [Règles métier](#règles-métier)
-- [Fusion hybride et décision](#fusion-hybride-et-décision)
-- [Résultats](#résultats)
-- [Livrables du dépôt](#livrables-du-dépôt)
+- [Architecture du systÃ¨me](#architecture-du-systÃ¨me)
+- [DonnÃ©es et feature engineering](#donnÃ©es-et-feature-engineering)
+- [ModÃ©lisation](#modÃ©lisation)
+- [RÃ¨gles mÃ©tier](#rÃ¨gles-mÃ©tier)
+- [Fusion hybride et dÃ©cision](#fusion-hybride-et-dÃ©cision)
+- [RÃ©sultats](#rÃ©sultats)
+- [Livrables du dÃ©pÃ´t](#livrables-du-dÃ©pÃ´t)
 - [Perspectives](#perspectives)
 - [Auteur et encadrement](#auteur-et-encadrement)
 
@@ -26,21 +26,21 @@ Système hybride de détection de fraudes sur les historiques de consommation, com
 
 ## Contexte
 
-La fraude sur la consommation d’**eau** et d’**électricité** génère des pertes économiques importantes et complique la gestion des réseaux. Chez **Amendis**, filiale marocaine du groupe **Veolia**, l’enjeu touche directement la performance opérationnelle et la qualité de service.
+La fraude sur la consommation dâ€™**eau** et dâ€™**Ã©lectricitÃ©** gÃ©nÃ¨re des pertes Ã©conomiques importantes et complique la gestion des rÃ©seaux. Chez **Amendis**, filiale marocaine du groupe **Veolia**, lâ€™enjeu touche directement la performance opÃ©rationnelle et la qualitÃ© de service.
 
-Ce projet s’inscrit dans une démarche d’**analytique avancée** : exploiter les historiques de comptage pour repérer les comportements atypiques, tout en s’appuyant sur l’expertise métier pour limiter les fausses alertes coûteuses.
+Ce projet sâ€™inscrit dans une dÃ©marche dâ€™**analytique avancÃ©e** : exploiter les historiques de comptage pour repÃ©rer les comportements atypiques, tout en sâ€™appuyant sur lâ€™expertise mÃ©tier pour limiter les fausses alertes coÃ»teuses.
 
 ---
 
-## Problématique
+## ProblÃ©matique
 
-Les fraudes prennent des formes variées (manipulation de compteur, branchements illégaux, anomalies de facturation, compteurs bloqués, etc.). Une détection uniquement manuelle ou purement statistique ne suffit pas face à la diversité des schémas.
+Les fraudes prennent des formes variÃ©es (manipulation de compteur, branchements illÃ©gaux, anomalies de facturation, compteurs bloquÃ©s, etc.). Une dÃ©tection uniquement manuelle ou purement statistique ne suffit pas face Ã  la diversitÃ© des schÃ©mas.
 
-Le système visé doit :
+Le systÃ¨me visÃ© doit :
 
 - produire des **scores fiables** par client/contrat ;
-- privilégier la **précision** (réduire les interventions inutiles) tout en conservant un **rappel** acceptable ;
-- rester **explicable** et **déployable** dans un contexte opérationnel.
+- privilÃ©gier la **prÃ©cision** (rÃ©duire les interventions inutiles) tout en conservant un **rappel** acceptable ;
+- rester **explicable** et **dÃ©ployable** dans un contexte opÃ©rationnel.
 
 ---
 
@@ -48,11 +48,11 @@ Le système visé doit :
 
 | Axe | Description |
 |-----|-------------|
-| Données | Analyser et préparer les historiques de consommation et les cas de fraude confirmés |
-| ML | Identifier les comportements suspects via modèles supervisés robustes |
-| Métier | Formaliser et intégrer des règles terrain (chutes, baisses structurelles, consommation nulle, régularité extrême) |
-| Hybride | Fusionner scores ML et scores règles pour une détection plus stable |
-| Exploitation | Pipeline avec évaluation, visualisations et recalibration périodique |
+| DonnÃ©es | Analyser et prÃ©parer les historiques de consommation et les cas de fraude confirmÃ©s |
+| ML | Identifier les comportements suspects via modÃ¨les supervisÃ©s robustes |
+| MÃ©tier | Formaliser et intÃ©grer des rÃ¨gles terrain (chutes, baisses structurelles, consommation nulle, rÃ©gularitÃ© extrÃªme) |
+| Hybride | Fusionner scores ML et scores rÃ¨gles pour une dÃ©tection plus stable |
+| Exploitation | Pipeline avec Ã©valuation, visualisations et recalibration pÃ©riodique |
 
 ---
 
@@ -60,46 +60,46 @@ Le système visé doit :
 
 La solution repose sur un **pipeline complet** :
 
-1. **Prétraitement** (valeurs manquantes, normalisation)
-2. **Feature engineering** (statistiques, tendances, forme de série, features dérivées des règles)
-3. **PU Learning** pour construire un jeu d’entraînement avec positifs confirmés et négatifs fiables
-4. **Stacking** (Random Forest, XGBoost, LightGBM ? méta-modèle logistique)
-5. **Gestion du déséquilibre** (pondération des classes, SMOTE / ADASYN sur le train uniquement)
-6. **Fusion hybride** avec les règles métier pondérées et seuil décisionnel optimisé
+1. **PrÃ©traitement** (valeurs manquantes, normalisation)
+2. **Feature engineering** (statistiques, tendances, forme de sÃ©rie, features dÃ©rivÃ©es des rÃ¨gles)
+3. **PU Learning** pour construire un jeu dâ€™entraÃ®nement avec positifs confirmÃ©s et nÃ©gatifs fiables
+4. **Stacking** (Random Forest, XGBoost, LightGBM ? mÃ©ta-modÃ¨le logistique)
+5. **Gestion du dÃ©sÃ©quilibre** (pondÃ©ration des classes, SMOTE / ADASYN sur le train uniquement)
+6. **Fusion hybride** avec les rÃ¨gles mÃ©tier pondÃ©rÃ©es et seuil dÃ©cisionnel optimisÃ©
 
 ---
 
-## Architecture du système
+## Architecture du systÃ¨me
 
 ```mermaid
 flowchart LR
   subgraph ingest [Ingestion]
     A[Historiques consommation]
-    B[Fraudes confirmées]
+    B[Fraudes confirmÃ©es]
   end
 
-  subgraph prep [Préparation]
+  subgraph prep [PrÃ©paration]
     C[Nettoyage & interpolation]
     D[Feature engineering]
-    E[PU Learning — négatifs fiables]
+    E[PU Learning â€” nÃ©gatifs fiables]
   end
 
   subgraph ml [Machine Learning]
     F[Random Forest]
     G[XGBoost]
     H[LightGBM]
-    I[Méta-modèle — régression logistique]
+    I[MÃ©ta-modÃ¨le â€” rÃ©gression logistique]
   end
 
-  subgraph rules [Règles métier]
-    R1[R1 — Chute brutale]
-    R2[R2 — Baisse continue]
-    R3[R3 — Consommation quasi nulle]
-    R4[R4 — Régularité extrême]
-    S[Score règles pondéré]
+  subgraph rules [RÃ¨gles mÃ©tier]
+    R1[R1 â€” Chute brutale]
+    R2[R2 â€” Baisse continue]
+    R3[R3 â€” Consommation quasi nulle]
+    R4[R4 â€” RÃ©gularitÃ© extrÃªme]
+    S[Score rÃ¨gles pondÃ©rÃ©]
   end
 
-  subgraph decision [Décision]
+  subgraph decision [DÃ©cision]
     J[Score final hybride]
     K{Seuil 0,8}
     L[Alerte fraude]
@@ -118,86 +118,86 @@ flowchart LR
 
 ---
 
-## Données et feature engineering
+## DonnÃ©es et feature engineering
 
 ### Sources
 
 - **Consommations mensuelles** : identifiants client/contrat, **30 mois** (janvier 2023 ? juin 2025)
-- **Registre des fraudes** déjà détectées par Amendis (fusion avec les historiques)
+- **Registre des fraudes** dÃ©jÃ  dÃ©tectÃ©es par Amendis (fusion avec les historiques)
 
-### Prétraitement
+### PrÃ©traitement
 
-- Interpolation linéaire si **? 5 mois** manquants ; exclusion au-delà
-- Normalisation des variables pour stabiliser l’apprentissage
+- Interpolation linÃ©aire si **? 5 mois** manquants ; exclusion au-delÃ 
+- Normalisation des variables pour stabiliser lâ€™apprentissage
 
 ### Familles de variables (extrait)
 
 | Famille | Exemples |
 |---------|----------|
-| Niveau & dispersion | Moyenne 30 mois, écart-type, CV, min/max |
-| Tendances & dynamique | Pente 30 mois, deltas récents, `MaxDrop`, `DropCount`, `SpikeCount` |
-| Forme de série | Skewness, kurtosis, amplitude saisonnière |
-| Règles encodées | `R1_*`, `R3_*`, `R4_*` (fréquence, intensité, extrêmes) |
+| Niveau & dispersion | Moyenne 30 mois, Ã©cart-type, CV, min/max |
+| Tendances & dynamique | Pente 30 mois, deltas rÃ©cents, `MaxDrop`, `DropCount`, `SpikeCount` |
+| Forme de sÃ©rie | Skewness, kurtosis, amplitude saisonniÃ¨re |
+| RÃ¨gles encodÃ©es | `R1_*`, `R3_*`, `R4_*` (frÃ©quence, intensitÃ©, extrÃªmes) |
 
 ---
 
-## Modélisation
+## ModÃ©lisation
 
-### Labels incertains — PU Learning
+### Labels incertains â€” PU Learning
 
-Les clients « non fraudeurs » peuvent inclure des fraudes non encore détectées. Un **Random Forest** est entraîné sur positifs confirmés + un échantillon non labellisé ; les clients à **plus faible probabilité** servent de **négatifs fiables** pour l’entraînement final.
+Les clients Â« non fraudeurs Â» peuvent inclure des fraudes non encore dÃ©tectÃ©es. Un **Random Forest** est entraÃ®nÃ© sur positifs confirmÃ©s + un Ã©chantillon non labellisÃ© ; les clients Ã  **plus faible probabilitÃ©** servent de **nÃ©gatifs fiables** pour lâ€™entraÃ®nement final.
 
 ### Split temporel
 
 | Jeu | Part |
 |-----|------|
-| Train | 70 % — mois les plus anciens |
+| Train | 70 % â€” mois les plus anciens |
 | Validation | 15 % |
-| Test | 15 % — mois les plus récents |
+| Test | 15 % â€” mois les plus rÃ©cents |
 
 Ce decoupage limite la **fuite temporelle** et reproduit un usage en production.
 
 ### Stacking
 
-| Composant | Rôle |
+| Composant | RÃ´le |
 |-----------|------|
 | **Random Forest** | 200 arbres, `class_weight='balanced'` |
 | **XGBoost** | `learning_rate=0.05`, `max_depth=6`, `scale_pos_weight` |
 | **LightGBM** | `num_leaves=31`, `learning_rate=0.05`, `scale_pos_weight` |
-| **Méta-modèle** | Régression logistique (L2, `liblinear`) sur les prédictions des modèles de base |
+| **MÃ©ta-modÃ¨le** | RÃ©gression logistique (L2, `liblinear`) sur les prÃ©dictions des modÃ¨les de base |
 
 Validation par **cross-validation temporelle**, **early stopping** (XGBoost / LightGBM) et suivi du **gap train/validation**.
 
 ---
 
-## Règles métier
+## RÃ¨gles mÃ©tier
 
-| Règle | Intention | Déclenchement (résumé) |
+| RÃ¨gle | Intention | DÃ©clenchement (rÃ©sumÃ©) |
 |-------|-----------|-------------------------|
-| **R1 — Chute brutale** | Baisse soudaine suspecte | Baisse **? 30 %** (comparaison interannuelle sur mois fixe **ou** fenêtre glissante 3 vs 3 mois) |
-| **R2 — Baisse continue** | Dégradation persistante | Baisse **? 30 %** entre années (2023 vs 2024, ou 2025 vs mêmes mois 2024) |
-| **R3 — Absence de consommation** | Compteur bloqué / détournement | Moyenne 2025 **< 5 kWh** |
-| **R4 — Régularité extrême** | Compteur possiblement bloqué | CV **< 2 %**, faible écart-type, faible saisonnalité, répétition sur **? 6 mois** |
+| **R1 â€” Chute brutale** | Baisse soudaine suspecte | Baisse **> 30 %** (comparaison interannuelle sur mois fixe **ou** fenÃªtre glissante 3 vs 3 mois) |
+| **R2 â€” Baisse continue** | DÃ©gradation persistante | Baisse **> 30 %** entre annÃ©es (2023 vs 2024, ou 2025 vs mÃªmes mois 2024) |
+| **R3 â€” Absence de consommation** | Compteur bloquÃ© / dÃ©tournement | Moyenne 2025 **< 5 kWh** |
+| **R4 â€” RÃ©gularitÃ© extrÃªme** | Compteur possiblement bloquÃ© | CV **< 2 %**, faible Ã©cart-type, faible saisonnalitÃ©, rÃ©pÃ©tition sur ** + 6 mois** |
 
-Les coefficients des règles sont **optimisés (Grid Search)** pour limiter les faux positifs.
+Les coefficients des rÃ¨gles sont **optimisÃ©s (Grid Search)** pour limiter les faux positifs.
 
 ---
 
-## Fusion hybride et décision
+## Fusion hybride et dÃ©cision
 
-**Score règles** (pondération $\gamma_i$ par règle) :
-
-$$
-\text{Score}_{\text{règles}} = \sum_i \gamma_i \cdot R_i
-$$
-
-**Score final** (calibration de $\alpha$ par régression logistique) :
+**Score rÃ¨gles** (pondÃ©ration $\gamma_i$ par rÃ¨gle) :
 
 $$
-\text{Score}_{\text{final}} = \alpha \cdot \text{Score}_{\text{ML}} + (1 - \alpha) \cdot \text{Score}_{\text{règles}}
+\text{Score}_{\text{rÃ¨gles}} = \sum_i \gamma_i \cdot R_i
 $$
 
-**Politique de décision** (optimisée par Grid Search) :
+**Score final** (calibration de $\alpha$ par rÃ©gression logistique) :
+
+$$
+\text{Score}_{\text{final}} = \alpha \cdot \text{Score}_{\text{ML}} + (1 - \alpha) \cdot \text{Score}_{\text{rÃ¨gles}}
+$$
+
+**Politique de dÃ©cision** (optimisÃ©e par Grid Search) :
 
 $$
 \text{Score}_{\text{final}} > 0{,}8 \Rightarrow \text{client suspect}
@@ -205,40 +205,40 @@ $$
 
 ---
 
-## Résultats
+## RÃ©sultats
 
-Évaluation sur le jeu de test (environ **27 000 clients** dans le périmètre du stage) :
+Ã‰valuation sur le jeu de test (environ **27 000 clients** dans le pÃ©rimÃ¨tre du stage) :
 
-| Métrique | Valeur | Lecture |
+| MÃ©trique | Valeur | Lecture |
 |----------|--------|---------|
-| **AUC ROC** | **0,942** | Très bonne séparation fraudeurs / non-fraudeurs |
-| **Précision** | 30,4 % | Part de vrais positifs parmi les alertes (faux positifs encore élevés) |
+| **AUC ROC** | **0,942** | TrÃ¨s bonne sÃ©paration fraudeurs / non-fraudeurs |
+| **PrÃ©cision** | 30,4 % | Part de vrais positifs parmi les alertes (faux positifs encore Ã©levÃ©s) |
 | **Rappel** | 70,3 % | Bonne couverture des fraudes connues |
-| **F1-Score** | 42,4 % | Compromis précision/rappel, marge de progression |
+| **F1-Score** | 42,4 % | Compromis prÃ©cision/rappel, marge de progression |
 
-Le système combine **forte capacité discriminante** (AUC) et **bon rappel**, avec une **précision opérationnelle** à améliorer — axe prioritaire des travaux futurs.
+Le systÃ¨me combine **forte capacitÃ© discriminante** (AUC) et **bon rappel**, avec une **prÃ©cision opÃ©rationnelle** Ã  amÃ©liorer â€” axe prioritaire des travaux futurs.
 
-Analyses complémentaires réalisées dans le rapport : matrice de confusion, courbes ROC/PR, importance des variables et **SHAP**.
+Analyses complÃ©mentaires rÃ©alisÃ©es dans le rapport : matrice de confusion, courbes ROC/PR, importance des variables et **SHAP**.
 
 ---
 
-## Livrables du dépôt
+## Livrables du dÃ©pÃ´t
 
-Ce dépôt documente le projet de stage (données et code source non publiés pour des raisons de confidentialité entreprise).
+Ce dÃ©pÃ´t documente le projet de stage (donnÃ©es et code source non publiÃ©s pour des raisons de confidentialitÃ© entreprise).
 
 | Fichier | Description |
 |---------|-------------|
-| [`docs/Rapport.pdf`](docs/Rapport.pdf) | Rapport technique complet (méthodologie, règles, résultats, perspectives) |
-| [`docs/Présentation.pdf`](docs/Pr%C3%A9sentation.pdf) | Support de présentation du projet |
+| [`docs/Rapport.pdf`](docs/Rapport.pdf) | Rapport technique complet (mÃ©thodologie, rÃ¨gles, rÃ©sultats, perspectives) |
+| [`docs/PrÃ©sentation.pdf`](docs/Pr%C3%A9sentation.pdf) | Support de prÃ©sentation du projet |
 
 ---
 
 ## Perspectives
 
 - Application mobile pour la **validation terrain** des alertes
-- Montée en charge (**> 1 M clients**) : Spark, Kafka, Airflow, pipeline ETL mensuel automatisé
-- Réduction des faux positifs : PU Learning affiné, nouvelles architectures de stacking, règles métier enrichies
-- Suivi longitudinal des anomalies et **rapports analytiques** pour les responsables métier
+- MontÃ©e en charge (**> 1 M clients**) : Spark, Kafka, Airflow, pipeline ETL mensuel automatisÃ©
+- RÃ©duction des faux positifs : PU Learning affinÃ©, nouvelles architectures de stacking, rÃ¨gles mÃ©tier enrichies
+- Suivi longitudinal des anomalies et **rapports analytiques** pour les responsables mÃ©tier
 
 ---
 
@@ -246,19 +246,19 @@ Ce dépôt documente le projet de stage (données et code source non publiés pour d
 
 | | |
 |---|---|
-| **Stagiaire** | Yassir Adila — ENSA Tétouan |
-| **Encadrant entreprise** | Mourad El Mahoutti — Amendis / Veolia Maroc |
-| **Durée** | 2 mois |
-| **Année universitaire** | 2024–2025 |
+| **Stagiaire** | Yassir Adila â€” ENSA TÃ©touan |
+| **Encadrant entreprise** | Mourad El Mahoutti â€” Amendis / Veolia Maroc |
+| **DurÃ©e** | 2 mois |
+| **AnnÃ©e universitaire** | 2024â€“2025 |
 
 ---
 
-## Licence et confidentialité
+## Licence et confidentialitÃ©
 
-Les documents et méthodes décrits relèvent d’un **projet de stage en environnement professionnel**. Les jeux de données Amendis ne sont pas inclus dans ce dépôt. Toute réutilisation du contenu doit respecter les accords de confidentialité de l’entreprise d’accueil.
+Les documents et mÃ©thodes dÃ©crits relÃ¨vent dâ€™un **projet de stage en environnement professionnel**. Les jeux de donnÃ©es Amendis ne sont pas inclus dans ce dÃ©pÃ´t. Toute rÃ©utilisation du contenu doit respecter les accords de confidentialitÃ© de lâ€™entreprise dâ€™accueil.
 
 ---
 
 <p align="center">
-  <sub>Dépôt GitHub : <a href="https://github.com/yassiradila/Fraud_Detection_Analytics_Project">yassiradila/Fraud_Detection_Analytics_Project</a></sub>
+  <sub>DÃ©pÃ´t GitHub : <a href="https://github.com/yassiradila/Fraud_Detection_Analytics_Project">yassiradila/Fraud_Detection_Analytics_Project</a></sub>
 </p>
