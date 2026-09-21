@@ -185,23 +185,23 @@ Les coefficients des règles sont **optimisés (Grid Search)** pour limiter les fa
 
 ## Fusion hybride et décision
 
-**Score règles** (pondération \(\gamma_i\) par règle) :
+**Score règles** (pondération $\gamma_i$ par règle) :
 
-\[
+$$
 \text{Score}_{\text{règles}} = \sum_i \gamma_i \cdot R_i
-\]
+$$
 
-**Score final** (calibration de \(\alpha\) par régression logistique) :
+**Score final** (calibration de $\alpha$ par régression logistique) :
 
-\[
+$$
 \text{Score}_{\text{final}} = \alpha \cdot \text{Score}_{\text{ML}} + (1 - \alpha) \cdot \text{Score}_{\text{règles}}
-\]
+$$
 
 **Politique de décision** (optimisée par Grid Search) :
 
-\[
+$$
 \text{Score}_{\text{final}} > 0{,}8 \Rightarrow \text{client suspect}
-\]
+$$
 
 ---
 
